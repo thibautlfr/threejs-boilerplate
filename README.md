@@ -8,6 +8,7 @@ pnpm install @types/three --save-dev
 pnpm install dat.gui@latest --save-dev
 pnpm install @types/dat.gui@latest --save-dev
 pnpm add --save-dev --save-exact @biomejs/biome
+pnpm install mitt
 ```
 
 ## References
@@ -18,3 +19,4 @@ pnpm add --save-dev --save-exact @biomejs/biome
 - [dat.gui](https://github.com/dataarts/dat.gui/blob/master/API.md)
 - [Threejs Tutorials](https://sbcode.net/threejs/)
 - [Biome](https://biomejs.dev/)
+- [Mitt](https://github.com/developit/mitt)
