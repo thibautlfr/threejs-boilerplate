@@ -1,5 +1,5 @@
 import type * as THREE from "three";
-import type { GLTF } from "three/addons";
+import type {GLTF} from "three/addons";
 
 export interface TextureSource {
 	readonly name: string;

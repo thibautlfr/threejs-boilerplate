@@ -1,11 +1,11 @@
 import * as THREE from "three";
 import Camera from "./camera.ts";
 import Renderer from "./renderer.ts";
+import {sources} from "./sources.ts";
 import Debug from "./utils/debug.ts";
 import Resources from "./utils/resources.ts";
 import Sizes from "./utils/sizes.ts";
 import Time from "./utils/time.ts";
-import { sources } from "./sources.ts";
 import World from "./world/world.ts";
 
 declare global {

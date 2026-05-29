@@ -18,9 +18,7 @@ export default class Time {
 		this.elapsed = 0;
 		this.delta = 16;
 
-		this.animationFrameId = window.requestAnimationFrame((t) =>
-			this.tick(t),
-		);
+		this.animationFrameId = window.requestAnimationFrame((t) => this.tick(t));
 	}
 
 	private tick(timestamp: number) {
@@ -30,9 +28,7 @@ export default class Time {
 
 		this.emitter.emit("tick");
 
-		this.animationFrameId = window.requestAnimationFrame((t) =>
-			this.tick(t),
-		);
+		this.animationFrameId = window.requestAnimationFrame((t) => this.tick(t));
 	}
 
 	destroy() {

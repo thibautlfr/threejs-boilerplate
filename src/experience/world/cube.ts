@@ -10,7 +10,6 @@ export default class Cube {
 
 		this.mesh = new THREE.Mesh(geometry, material);
 		this.mesh.castShadow = true;
-		this.mesh.position.y = 0.5;
 		scene.add(this.mesh);
 
 		if (debug.active && debug.ui) {

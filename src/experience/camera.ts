@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons";
+import {OrbitControls} from "three/addons";
 import type Sizes from "./utils/sizes.ts";
 
 export default class Camera {
@@ -7,11 +7,7 @@ export default class Camera {
 	controls: OrbitControls;
 	private sizes: Sizes;
 
-	constructor(
-		canvas: HTMLCanvasElement,
-		scene: THREE.Scene,
-		sizes: Sizes,
-	) {
+	constructor(canvas: HTMLCanvasElement, scene: THREE.Scene, sizes: Sizes) {
 		this.sizes = sizes;
 
 		this.instance = new THREE.PerspectiveCamera(
