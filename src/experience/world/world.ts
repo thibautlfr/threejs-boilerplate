@@ -18,6 +18,17 @@ export default class World {
 		directionalLight.position.set(3.5, 2, -1.25);
 		scene.add(directionalLight);
 
+		const grid = new THREE.GridHelper(10, 10, "#444444", "#2a2a2a");
+		scene.add(grid);
+
+		const floor = new THREE.Mesh(
+			new THREE.PlaneGeometry(10, 10),
+			new THREE.ShadowMaterial({ opacity: 0.15 }),
+		);
+		floor.rotation.x = -Math.PI * 0.5;
+		floor.receiveShadow = true;
+		scene.add(floor);
+
 		const onReady = () => {
 			this.cube = new Cube(scene, debug);
 		};

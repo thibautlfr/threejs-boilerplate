@@ -7,7 +7,9 @@ Minimal starter for building 3D web experiences with Three.js, TypeScript, and V
 - **Three.js + TypeScript + Vite** — fast dev server, hot reload, type safety
 - **Organized architecture** — singleton Experience pattern with dependency injection
 - **Asset loading system** — typed resource loader with progress and ready events
-- **Debug UI** — lil-gui panel activated with `#debug` in the URL
+- **Debug UI** — lil-gui panel activated with `#debug` in the URL, toggle with `h` key
+- **Performance stats** — FPS/CPU/GPU monitor via stats-gl (visible in debug mode)
+- **Grid helper** — ground grid with shadow plane for spatial reference
 - **Responsive canvas** — handles resize and pixel ratio changes
 - **Proper lifecycle** — every class has a `destroy()` method for clean teardown
 
@@ -93,7 +95,9 @@ Access loaded assets via `resources.get("myTexture")` inside the `ready` callbac
 
 ### Debug Panel
 
-Activate by navigating to `http://localhost:5173/#debug`. Use `debug.ui` to add controls:
+Activate by navigating to `http://localhost:5173/#debug`, or press `h` to toggle visibility at any time. The debug mode includes the lil-gui panel and a performance monitor (FPS/CPU/GPU).
+
+Use `debug.ui` to add controls:
 
 ```ts
 if (debug.active && debug.ui) {
@@ -115,11 +119,23 @@ Call `window.experience.destroy()` to tear down the entire scene. All geometries
 | `pnpm build` | Type-check and build for production |
 | `pnpm preview` | Preview the production build locally |
 
+## Going Further
+
+This boilerplate is intentionally minimal. Here are common next steps depending on your project:
+
+- **Post-processing** — add `EffectComposer` with bloom, SSAO, or custom shaders via `three/addons`
+- **Loading screen** — listen to the `progress` event on `Resources` to build a loading bar overlay
+- **GLTF models** — add entries to `sources.ts` and use `resources.get("myModel")` to access loaded models
+- **Environment maps** — use `CubeTextureLoader` to load skyboxes or HDRI environments, and set `scene.environment` for PBR materials and/or `scene.background` for a skybox
+- **Physics** — integrate [Rapier](https://rapier.rs/) or [Cannon-es](https://pmndrs.github.io/cannon-es/) for rigid body simulation
+- **Shaders** — create custom `ShaderMaterial` or `RawShaderMaterial` with GLSL files
+
 ## Tech Stack
 
 - [Three.js](https://threejs.org/) — 3D rendering
 - [TypeScript](https://www.typescriptlang.org/) — type safety
 - [Vite](https://vitejs.dev/) — build tool
 - [lil-gui](https://lil-gui.georgealways.com/) — debug UI
+- [stats-gl](https://github.com/RenaudRohlworst/stats-gl) — performance monitor
 - [Mitt](https://github.com/developit/mitt) — typed event emitter
 - [Biome](https://biomejs.dev/) — linting and formatting

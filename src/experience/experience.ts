@@ -48,6 +48,8 @@ export default class Experience {
 		this.renderer = new Renderer(canvas, this.scene, this.sizes, this.camera);
 		this.world = new World(this.scene, this.resources, this.debug);
 
+		this.debug.initStats(this.renderer.instance);
+
 		this.sizes.emitter.on("resize", () => this.resize());
 		this.time.emitter.on("tick", () => this.update());
 
@@ -60,9 +62,13 @@ export default class Experience {
 	}
 
 	private update() {
+		this.debug.begin();
+
 		this.camera.update();
 		this.world.update();
 		this.renderer.update();
+
+		this.debug.end();
 	}
 
 	destroy() {

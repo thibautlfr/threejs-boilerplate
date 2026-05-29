@@ -27,6 +27,9 @@ importers:
       lil-gui:
         specifier: ^0.21.0
         version: 0.21.0
+      stats-gl:
+        specifier: ^4.1.0
+        version: 4.1.0(three@0.184.0)
       typescript:
         specifier: ~6.0.2
         version: 6.0.3
@@ -525,6 +528,14 @@ packages:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
 
+  stats-gl@4.1.0:
+    resolution: {integrity: sha512-A0aw+njfFtowIJ5tCbCxKBRR7oflVmGEjdXfMI7IAc/fDTdms4eIKSaLDWL222XCrfQdT49VE19JgKGDQmz0yw==}
+    peerDependencies:
+      three: '*'
+    peerDependenciesMeta:
+      three:
+        optional: true
+
   strip-outer@1.0.1:
     resolution: {integrity: sha512-k55yxKHwaXnpYGsOzg4Vl8+tDrWylxDEpknGjhTiZB8dFRU5rTo9CAzeycivxV3s+zlTKwrs6WxMxR95n26kwg==}
     engines: {node: '>=0.10.0'}
@@ -995,6 +1006,10 @@ snapshots:
   slash@3.0.0: {}
 
   source-map-js@1.2.1: {}
+
+  stats-gl@4.1.0(three@0.184.0):
+    optionalDependencies:
+      three: 0.184.0
 
   strip-outer@1.0.1:
     dependencies:
