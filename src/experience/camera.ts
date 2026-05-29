@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import {OrbitControls} from "three/addons";
-import Experience from "./experience";
+import { OrbitControls } from "three/addons";
 import type Sizes from "./utils/sizes.ts";
 
 export default class Camera {
@@ -8,9 +7,11 @@ export default class Camera {
 	controls: OrbitControls;
 	private sizes: Sizes;
 
-	constructor() {
-		const { sizes, scene, canvas } = Experience.getInstance();
-
+	constructor(
+		canvas: HTMLCanvasElement,
+		scene: THREE.Scene,
+		sizes: Sizes,
+	) {
 		this.sizes = sizes;
 
 		this.instance = new THREE.PerspectiveCamera(
@@ -24,11 +25,6 @@ export default class Camera {
 
 		this.controls = new OrbitControls(this.instance, canvas);
 		this.controls.enableDamping = true;
-
-		sizes.emitter.on("resize", () => {
-			this.instance.aspect = sizes.width / sizes.height;
-			this.instance.updateProjectionMatrix();
-		});
 	}
 
 	resize() {
@@ -38,5 +34,9 @@ export default class Camera {
 
 	update() {
 		this.controls.update();
+	}
+
+	destroy() {
+		this.controls.dispose();
 	}
 }

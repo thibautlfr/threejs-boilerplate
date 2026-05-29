@@ -8,30 +8,34 @@ export default class Time {
 	start: number;
 	current: number;
 	elapsed: number;
-	delta: number = 16;
+	delta: number;
 	readonly emitter = mitt<TimeEvent>();
+	private animationFrameId = 0;
 
 	constructor() {
-		this.start = Date.now();
+		this.start = performance.now();
 		this.current = this.start;
 		this.elapsed = 0;
 		this.delta = 16;
 
-		window.requestAnimationFrame(() => {
-			this.tick();
-		});
+		this.animationFrameId = window.requestAnimationFrame((t) =>
+			this.tick(t),
+		);
 	}
 
-	tick() {
-		const currentTime = Date.now();
-		this.delta = currentTime - this.current;
-		this.current = currentTime;
+	private tick(timestamp: number) {
+		this.delta = timestamp - this.current;
+		this.current = timestamp;
 		this.elapsed = this.current - this.start;
 
 		this.emitter.emit("tick");
 
-		window.requestAnimationFrame(() => {
-			this.tick();
-		});
+		this.animationFrameId = window.requestAnimationFrame((t) =>
+			this.tick(t),
+		);
+	}
+
+	destroy() {
+		cancelAnimationFrame(this.animationFrameId);
 	}
 }

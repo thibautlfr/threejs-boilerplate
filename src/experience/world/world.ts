@@ -1,22 +1,36 @@
 import * as THREE from "three";
-import Experience from "../experience.ts";
-import Box from "./box.ts";
+import type Debug from "../utils/debug.ts";
+import type Resources from "../utils/resources.ts";
+import Cube from "./cube.ts";
 
 export default class World {
-	constructor() {
-		const scene = Experience.getInstance().scene;
+	private cube: Cube | null = null;
+	private readonly unsubscribeReady: () => void;
 
-		const ambientLight = new THREE.AmbientLight(0x2266d4, 1);
+	constructor(scene: THREE.Scene, resources: Resources, debug: Debug) {
+		const ambientLight = new THREE.AmbientLight("#ffffff", 0.5);
 		scene.add(ambientLight);
 
-		const directionalLight = new THREE.DirectionalLight(0x2266d4, 2);
-		directionalLight.position.set(5, 5, 5);
+		const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
+		directionalLight.castShadow = true;
+		directionalLight.shadow.camera.far = 15;
+		directionalLight.shadow.mapSize.set(1024, 1024);
+		directionalLight.position.set(3.5, 2, -1.25);
 		scene.add(directionalLight);
 
-		new Box();
+		const onReady = () => {
+			this.cube = new Cube(scene, debug);
+		};
+
+		resources.emitter.on("ready", onReady);
+		this.unsubscribeReady = () => resources.emitter.off("ready", onReady);
 	}
 
 	update() {
-		// Can be useful for GLTF objects with animations
+		this.cube?.update();
+	}
+
+	destroy() {
+		this.unsubscribeReady();
 	}
 }

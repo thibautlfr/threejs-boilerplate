@@ -10,16 +10,22 @@ export default class Sizes {
 	pixelRatio: number;
 	readonly emitter = mitt<SizesEvents>();
 
+	private handleResize = () => {
+		this.width = window.innerWidth;
+		this.height = window.innerHeight;
+		this.pixelRatio = Math.min(window.devicePixelRatio, 2);
+		this.emitter.emit("resize");
+	};
+
 	constructor() {
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 		this.pixelRatio = Math.min(window.devicePixelRatio, 2);
 
-		window.addEventListener("resize", () => {
-			this.width = window.innerWidth;
-			this.height = window.innerHeight;
-			this.pixelRatio = Math.min(window.devicePixelRatio, 2);
-			this.emitter.emit("resize");
-		});
+		window.addEventListener("resize", this.handleResize);
+	}
+
+	destroy() {
+		window.removeEventListener("resize", this.handleResize);
 	}
 }

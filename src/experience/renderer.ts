@@ -1,6 +1,4 @@
-// biome-ignore assist/source/organizeImports: <explanation>
 import * as THREE from "three";
-import Experience from "./experience.ts";
 import type Camera from "./camera.ts";
 import type Sizes from "./utils/sizes.ts";
 
@@ -10,19 +8,20 @@ export default class Renderer {
 	private readonly scene: THREE.Scene;
 	private camera: Camera;
 
-	constructor() {
-		const { canvas, sizes, scene, camera } = Experience.getInstance();
-
+	constructor(
+		canvas: HTMLCanvasElement,
+		scene: THREE.Scene,
+		sizes: Sizes,
+		camera: Camera,
+	) {
 		this.sizes = sizes;
 		this.scene = scene;
 		this.camera = camera;
 
 		this.instance = new THREE.WebGLRenderer({ canvas, antialias: true });
-		this.instance.toneMapping = THREE.CineonToneMapping;
-		this.instance.toneMappingExposure = 1.75;
 		this.instance.shadowMap.enabled = true;
-		this.instance.shadowMap.type = THREE.PCFSoftShadowMap;
-		this.instance.setClearColor("#211d20");
+		this.instance.shadowMap.type = THREE.PCFShadowMap;
+		this.instance.setClearColor("#1a1a1a");
 		this.instance.setSize(sizes.width, sizes.height);
 		this.instance.setPixelRatio(sizes.pixelRatio);
 	}

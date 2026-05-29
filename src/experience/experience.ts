@@ -2,8 +2,10 @@ import * as THREE from "three";
 import Camera from "./camera.ts";
 import Renderer from "./renderer.ts";
 import Debug from "./utils/debug.ts";
-import Sizes from "./utils/sizes";
+import Resources from "./utils/resources.ts";
+import Sizes from "./utils/sizes.ts";
 import Time from "./utils/time.ts";
+import { sources } from "./sources.ts";
 import World from "./world/world.ts";
 
 declare global {
@@ -23,6 +25,7 @@ export default class Experience {
 	world: World;
 	debug: Debug;
 	time: Time;
+	resources: Resources;
 
 	static getInstance(canvas?: HTMLCanvasElement): Experience {
 		if (!Experience.instance) {
@@ -34,41 +37,56 @@ export default class Experience {
 	}
 
 	private constructor(canvas: HTMLCanvasElement) {
-		Experience.instance = this;
-
-		window.experience = this;
-
 		this.canvas = canvas;
 
 		this.debug = new Debug();
 		this.sizes = new Sizes();
 		this.time = new Time();
 		this.scene = new THREE.Scene();
-		this.camera = new Camera();
-		this.renderer = new Renderer();
-		this.world = new World();
+		this.resources = new Resources(sources);
+		this.camera = new Camera(canvas, this.scene, this.sizes);
+		this.renderer = new Renderer(canvas, this.scene, this.sizes, this.camera);
+		this.world = new World(this.scene, this.resources, this.debug);
 
-		this.sizes.emitter.on("resize", () => {
-			this.resize();
-		});
+		this.sizes.emitter.on("resize", () => this.resize());
+		this.time.emitter.on("tick", () => this.update());
 
-		this.time.emitter.on("tick", () => {
-			this.update();
-		});
+		window.experience = this;
 	}
 
-	resize() {
+	private resize() {
 		this.camera.resize();
 		this.renderer.resize();
 	}
 
-	update() {
+	private update() {
 		this.camera.update();
 		this.world.update();
 		this.renderer.update();
 	}
 
 	destroy() {
-		console.log("Experience destroyed");
+		this.time.destroy();
+		this.sizes.destroy();
+		this.world.destroy();
+		this.camera.destroy();
+		this.renderer.instance.dispose();
+		this.debug.destroy();
+		this.resources.destroy();
+
+		this.scene.traverse((child) => {
+			if (child instanceof THREE.Mesh) {
+				child.geometry.dispose();
+				if (Array.isArray(child.material)) {
+					for (const material of child.material) {
+						material.dispose();
+					}
+				} else {
+					child.material.dispose();
+				}
+			}
+		});
+
+		Experience.instance = null;
 	}
 }
