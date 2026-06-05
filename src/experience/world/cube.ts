@@ -1,20 +1,22 @@
 import * as THREE from "three";
-import type Debug from "../utils/debug.ts";
+import Experience from "../experience.ts";
 
 export default class Cube {
 	private readonly mesh: THREE.Mesh;
 
-	constructor(scene: THREE.Scene, debug: Debug) {
+	constructor() {
+		const experience = Experience.getInstance();
+
 		const geometry = new THREE.BoxGeometry(1, 1, 1);
 		const material = new THREE.MeshStandardMaterial({ color: 0x6699cc });
 
 		this.mesh = new THREE.Mesh(geometry, material);
 		this.mesh.castShadow = true;
 		this.mesh.position.y = 0.5;
-		scene.add(this.mesh);
+		experience.scene.add(this.mesh);
 
-		if (debug.active && debug.ui) {
-			const folder = debug.ui.addFolder("Cube");
+		if (experience.debug.active && experience.debug.ui) {
+			const folder = experience.debug.ui.addFolder("Cube");
 			folder.addColor(material, "color");
 			folder.add(material, "wireframe");
 			folder.add(this.mesh.position, "x", -5, 5, 0.01);

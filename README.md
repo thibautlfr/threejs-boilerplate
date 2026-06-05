@@ -5,7 +5,7 @@ Minimal starter for building 3D web experiences with Three.js, TypeScript, and V
 ## Features
 
 - **Three.js + TypeScript + Vite** — fast dev server, hot reload, type safety
-- **Organized architecture** — singleton Experience pattern with dependency injection
+- **Organized architecture** — singleton Experience pattern, classes self-resolve dependencies via `Experience.getInstance()`
 - **Asset loading system** — typed resource loader with progress and ready events
 - **Debug UI** — lil-gui panel activated with `#debug` in the URL, toggle with `h` key
 - **Performance stats** — FPS/CPU/GPU monitor via stats-gl (visible in debug mode)
@@ -36,7 +36,7 @@ src/
 ├── main.ts                      Entry point
 ├── style.css                    Full-viewport canvas styles
 └── experience/
-    ├── experience.ts            Composition root — wires all dependencies
+    ├── experience.ts            Singleton root — classes pull deps via getInstance()
     ├── camera.ts                PerspectiveCamera + OrbitControls
     ├── renderer.ts              WebGLRenderer configuration
     ├── sources.ts               Asset source definitions (types + list)
@@ -54,18 +54,20 @@ src/
 
 ### Adding a 3D Object
 
-Create a new class in `src/experience/world/`, accepting `scene` and `debug` as constructor parameters:
+Create a new class in `src/experience/world/` and retrieve what you need from the singleton:
 
 ```ts
 import * as THREE from "three";
-import type Debug from "../utils/debug.ts";
+import Experience from "../experience.ts";
 
 export default class MyObject {
-    constructor(scene: THREE.Scene, debug: Debug) {
+    constructor() {
+        const experience = Experience.getInstance();
+
         const geometry = new THREE.SphereGeometry(1, 32, 32);
         const material = new THREE.MeshStandardMaterial({ color: 0x44aa88 });
         const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
+        experience.scene.add(mesh);
     }
 }
 ```
@@ -91,15 +93,17 @@ export const sources: Source[] = [
 ];
 ```
 
-Access loaded assets via `resources.get("myTexture")` inside the `ready` callback.
+Access loaded assets via `experience.resources.get("myTexture")` inside the `ready` callback.
 
 ### Debug Panel
 
 Activate by navigating to `http://localhost:5173/#debug`, or press `h` to toggle visibility at any time. The debug mode includes the lil-gui panel and a performance monitor (FPS/CPU/GPU).
 
-Use `debug.ui` to add controls:
+Use `experience.debug.ui` to add controls:
 
 ```ts
+const { debug } = Experience.getInstance();
+
 if (debug.active && debug.ui) {
     const folder = debug.ui.addFolder("My Object");
     folder.addColor(material, "color");

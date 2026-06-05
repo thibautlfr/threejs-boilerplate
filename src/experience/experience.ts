@@ -31,12 +31,13 @@ export default class Experience {
 		if (!Experience.instance) {
 			if (!canvas)
 				throw new Error("Canvas is required to initialize Experience");
-			Experience.instance = new Experience(canvas);
+			new Experience(canvas);
 		}
-		return Experience.instance;
+		return Experience.instance!;
 	}
 
 	private constructor(canvas: HTMLCanvasElement) {
+		Experience.instance = this;
 		this.canvas = canvas;
 
 		this.debug = new Debug();
@@ -44,9 +45,9 @@ export default class Experience {
 		this.time = new Time();
 		this.scene = new THREE.Scene();
 		this.resources = new Resources(sources);
-		this.camera = new Camera(canvas, this.scene, this.sizes);
-		this.renderer = new Renderer(canvas, this.scene, this.sizes, this.camera);
-		this.world = new World(this.scene, this.resources, this.debug);
+		this.camera = new Camera();
+		this.renderer = new Renderer();
+		this.world = new World();
 
 		this.debug.initStats(this.renderer.instance);
 
