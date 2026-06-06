@@ -2,6 +2,16 @@
 
 Minimal starter for building 3D web experiences with Three.js, TypeScript, and Vite.
 
+<p align="center">
+  <a href="https://thibautlfr.github.io/threejs-boilerplate/">
+    <img src=".github/preview.png" alt="Three.js Boilerplate Preview" width="800" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://thibautlfr.github.io/threejs-boilerplate/">Live Demo</a>
+</p>
+
 ## Features
 
 - **Three.js + TypeScript + Vite** — fast dev server, hot reload, type safety
@@ -122,6 +132,33 @@ Call `window.experience.destroy()` to tear down the entire scene. All geometries
 | `pnpm dev` | Start development server |
 | `pnpm build` | Type-check and build for production |
 | `pnpm preview` | Preview the production build locally |
+| `pnpm deploy` | Build and deploy to GitHub Pages |
+
+## Deployment (GitHub Pages)
+
+The project is pre-configured for GitHub Pages deployment via `vite.config.ts`.
+
+### How it works
+
+In production, Vite's `base` is automatically set to `/<package-name>/` (read from `package.json`), matching the default GitHub Pages URL pattern `https://<user>.github.io/<repo-name>/`. In development, `base` stays `/` so everything works normally.
+
+Asset paths defined in `sources.ts` are resolved at runtime through `import.meta.env.BASE_URL`, so they work in both environments without any manual prefixing.
+
+### Deploy
+
+```bash
+pnpm deploy
+```
+
+This runs `pnpm build` automatically before pushing the `dist/` folder to the `gh-pages` branch. Make sure GitHub Pages is configured to serve from the `gh-pages` branch in your repository settings (Settings > Pages > Source > `gh-pages`).
+
+### Custom base path
+
+If the GitHub repository name differs from the `name` field in `package.json`, override the base path with the `VITE_BASE_PATH` environment variable:
+
+```bash
+VITE_BASE_PATH=/my-repo-name/ pnpm build
+```
 
 ## Going Further
 

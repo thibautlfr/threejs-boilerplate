@@ -55,20 +55,28 @@ export default class Resources {
 		}
 	}
 
+	private resolvePath(path: string): string {
+		const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+		return `${import.meta.env.BASE_URL}${cleanPath}`;
+	}
+
 	private startLoading(sources: Source[]): void {
 		for (const source of sources) {
 			if (source.type === "gltfModel") {
-				this.gltfLoader.load(source.path, (file) => {
+				this.gltfLoader.load(this.resolvePath(source.path), (file) => {
 					this.onSourceLoaded(source.name, file);
 				});
 			} else if (source.type === "texture") {
-				this.textureLoader.load(source.path, (file) => {
+				this.textureLoader.load(this.resolvePath(source.path), (file) => {
 					this.onSourceLoaded(source.name, file);
 				});
 			} else if (source.type === "cubeTexture") {
-				this.cubeTextureLoader.load([...source.path], (file) => {
-					this.onSourceLoaded(source.name, file);
-				});
+				this.cubeTextureLoader.load(
+					source.path.map((p) => this.resolvePath(p)),
+					(file) => {
+						this.onSourceLoaded(source.name, file);
+					},
+				);
 			}
 		}
 	}
